@@ -1,0 +1,5 @@
+# Ignore these folders and their contents
+build*/
+
+# Ignore any files ending with
+*.user
