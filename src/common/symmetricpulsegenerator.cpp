@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <time.h>
 
-SymmetricPulseGenerator &SymmetricPulseGenerator::getInstance()
+SymmetricPulseGenerator& SymmetricPulseGenerator::getInstance()
 {
     static SymmetricPulseGenerator instance;
     return instance;

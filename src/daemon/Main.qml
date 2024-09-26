@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls 2.15
 
 Window {
-    id: realScreen
+    id: daemonRealScreen
     width: 1920 / 2
     height: 1080 / 2
     visible: true

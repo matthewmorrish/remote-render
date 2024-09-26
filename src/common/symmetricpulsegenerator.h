@@ -14,7 +14,7 @@ private:
 
     ///// FUNCTIONS /////
 public:
-    static SymmetricPulseGenerator &getInstance();
+    static SymmetricPulseGenerator& getInstance();
                                     SymmetricPulseGenerator(SymmetricPulseGenerator const&) = delete;
     void                            operator=(SymmetricPulseGenerator const&)               = delete;
 
