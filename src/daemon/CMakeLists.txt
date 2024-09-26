@@ -16,6 +16,8 @@ qt_add_qml_module(appdaemon
     URI daemon
     VERSION 1.0
     QML_FILES Main.qml
+    SOURCES ../common/symmetricpulsegenerator.h ../common/symmetricpulsegenerator.cpp
+    SOURCES ../common/concurrentsegment.h       ../common/concurrentsegment.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -33,7 +35,10 @@ target_link_libraries(appdaemon
     PRIVATE Qt6::Quick
 )
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
+
 include(GNUInstallDirs)
+
 install(TARGETS appdaemon
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
