@@ -14,7 +14,7 @@ class FrameStream : public QObject
     ///// MEMBERS /////
 private:
     ConcurrentSegment           m_segment;
-    SymmetricPulseGenerator*    m_pulseGenerator;
+    SymmetricPulseGenerator     m_pulseGenerator;
     QImage                      m_frame;
 
     ///// FUNCTIONS /////

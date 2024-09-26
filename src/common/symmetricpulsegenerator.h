@@ -10,26 +10,21 @@ class SymmetricPulseGenerator : public QThread
 
     ///// MEMBERS /////
 private:
-    int                             m_pulseWidth;
+    int             m_pulseWidth;
 
     ///// FUNCTIONS /////
 public:
-    static SymmetricPulseGenerator& getInstance();
-                                    SymmetricPulseGenerator(SymmetricPulseGenerator const&) = delete;
-    void                            operator=(SymmetricPulseGenerator const&)               = delete;
-
-    bool                            setPulseWidth(int pulseWidth);
+                    SymmetricPulseGenerator();
+    bool            setPulseWidth(int pulseWidth);
 
 private:
-                                    SymmetricPulseGenerator();
+    inline u_llong  usecSinceEpoch();
+    inline u_llong  synchronizedTimeReference();
 
-    inline u_llong                  usecSinceEpoch();
-    inline u_llong                  synchronizedTimeReference();
-
-    void                            run() override;
+    void            run() override;
 
     ///// SIGNALS / SLOTS /////
 signals:
-    void                            requestRead();
-    void                            requestWrite();
+    void            requestRead();
+    void            requestWrite();
 };

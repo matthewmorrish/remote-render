@@ -3,14 +3,13 @@
 #include <QTime>
 
 FrameStream::FrameStream(QObject *parent)
-    : QObject(parent),
-    m_pulseGenerator(&SymmetricPulseGenerator::getInstance())
+    : QObject(parent)
 {
     m_segment.setHandle("img");
-    m_pulseGenerator->setPulseWidth(17000);
+    m_pulseGenerator.setPulseWidth(17000);
 
-    connect(m_pulseGenerator, &SymmetricPulseGenerator::requestRead, this, &FrameStream::onRequestRead);
-    m_pulseGenerator->start();
+    connect(&m_pulseGenerator, &SymmetricPulseGenerator::requestRead, this, &FrameStream::onRequestRead);
+    m_pulseGenerator.start();
 }
 
 void FrameStream::setFrame(const QImage& frame)

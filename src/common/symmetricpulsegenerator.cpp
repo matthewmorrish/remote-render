@@ -8,12 +8,6 @@
 #include <stdio.h>
 #include <time.h>
 
-SymmetricPulseGenerator& SymmetricPulseGenerator::getInstance()
-{
-    static SymmetricPulseGenerator instance;
-    return instance;
-}
-
 SymmetricPulseGenerator::SymmetricPulseGenerator()
     : m_pulseWidth(0)
 {
@@ -22,6 +16,11 @@ SymmetricPulseGenerator::SymmetricPulseGenerator()
 
 bool SymmetricPulseGenerator::setPulseWidth(int pulseWidth)
 {
+    /* TODO
+     * Setting a calculated pulse-width seems silly, this should
+     * be set in Hz then calculated on start.
+     */
+
     if (!m_pulseWidth)
     {
         m_pulseWidth = pulseWidth;
@@ -51,6 +50,12 @@ u_llong SymmetricPulseGenerator::synchronizedTimeReference()
 
 void SymmetricPulseGenerator::run() [[noreturn]]
 {
+    /* TODO
+     * This loop runs so fast that excessive compute resources
+     * are unnecessarily consumed on start.  A calculated delay
+     * should be added to drop resource consumption.
+     */
+
     u_llong readEmitTime    = synchronizedTimeReference()   + m_pulseWidth;
     u_llong writeEmitTime   = readEmitTime                  + (m_pulseWidth * 0.5);
 
