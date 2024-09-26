@@ -18,6 +18,7 @@ qt_add_qml_module(appdaemon
     QML_FILES Main.qml
     SOURCES ../common/symmetricpulsegenerator.h ../common/symmetricpulsegenerator.cpp
     SOURCES ../common/concurrentsegment.h       ../common/concurrentsegment.cpp
+    SOURCES qmlconcurrentsegment.h              qmlconcurrentsegment.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

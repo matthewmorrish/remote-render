@@ -8,6 +8,18 @@ Window {
     visible: true
     title: qsTr("Daemon - Real Screen")
 
+    Connections {
+        target: symmetricPulseGenerator
+        function onRequestWrite() {
+            virtualScreen.grabToImage(function(result) {
+                if (result !== null)
+                {
+                    qmlConcurrentSegment.write(result.image);
+                }
+             }, Qt.size(virtualScreen.width, virtualScreen.height))
+        }
+    }
+
     Rectangle {
         id: virtualScreenContainer
         width:  (1920 / 4) + 6          // +6 for border
