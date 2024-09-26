@@ -20,7 +20,7 @@ private:
     ///// FUNCTIONS /////
 public:
                                 FrameStream(QObject *parent = nullptr);
-    void                        setFrame(QImage const &image);
+    void                        setFrame(const QImage& image);
     QImage                      frame();
 
     ///// SIGNALS / SLOTS /////

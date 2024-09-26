@@ -13,7 +13,7 @@ FrameStream::FrameStream(QObject *parent)
     m_pulseGenerator->start();
 }
 
-void FrameStream::setFrame(const QImage &frame)
+void FrameStream::setFrame(const QImage& frame)
 {
     m_frame = frame;
     emit frameChanged();
@@ -26,5 +26,5 @@ QImage FrameStream::frame()
 
 void FrameStream::onRequestRead()
 {
-    setFrame(this->frame());
+    this->setFrame(this->frame());
 }

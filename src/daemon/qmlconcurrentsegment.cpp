@@ -19,7 +19,7 @@ QByteArray QmlConcurrentSegment::read()
     return m_segment.read();
 }
 
-void QmlConcurrentSegment::write(QImage img)
+void QmlConcurrentSegment::write(const QImage& img)
 {
     m_segment.writeImage(img);
 }

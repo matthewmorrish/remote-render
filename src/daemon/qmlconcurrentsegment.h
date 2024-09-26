@@ -23,5 +23,5 @@ public:
 
     void                setHandle(const QString& handle);
     QByteArray          read();
-    Q_INVOKABLE void    write(QImage img);
+    Q_INVOKABLE void    write(const QImage& img);
 };
