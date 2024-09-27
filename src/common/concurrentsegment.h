@@ -19,9 +19,6 @@ public:
 
     void            setHandle(const QString &handle);
 
-    QByteArray      read();
-    void            write(QByteArray data);
-
-    QImage          readImage();
-    void            writeImage(QImage img);
+    QImage          read();
+    void            write(QImage img);
 };

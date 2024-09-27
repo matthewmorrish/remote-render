@@ -24,28 +24,7 @@ void ConcurrentSegment::setHandle(const QString& handle)
     m_sharedMemory.setKey(handle);
 }
 
-QByteArray ConcurrentSegment::read()
-{
-    QByteArray data;
-    if (m_sharedMemory.attach())
-    {
-        m_sharedMemory.lock();
-
-        QBuffer buffer;
-        QDataStream in(&buffer);
-
-        buffer.setData((char*)m_sharedMemory.constData(), m_sharedMemory.size());
-        buffer.open(QBuffer::ReadOnly);
-        in >> data;
-
-        m_sharedMemory.unlock();
-        m_sharedMemory.detach();
-    }
-
-    return data;
-}
-
-QImage ConcurrentSegment::readImage()
+QImage ConcurrentSegment::read()
 {
     QImage image;
     if (m_sharedMemory.attach())
@@ -76,38 +55,7 @@ QImage ConcurrentSegment::readImage()
  * can be guaranteed not to exceed 2x the original images size.
  */
 
-void ConcurrentSegment::write(QByteArray data)
-{
-    // Stream data into a buffer
-    QBuffer dataBuffer;
-    dataBuffer.open(QBuffer::ReadWrite);
-    QDataStream out(&dataBuffer);
-    out << data;
-
-    int size = dataBuffer.size();
-
-    if (!m_sharedMemory.create(size*2))
-    {
-        if (m_sharedMemory.error() == QSharedMemory::AlreadyExists)
-        {
-            m_sharedMemory.attach();
-        }
-
-        else
-        {
-            qDebug() << QString("Unable to create or attach to shared memory segment: %1").arg(m_sharedMemory.errorString());
-            return;
-        }
-    }
-
-    m_sharedMemory.lock();
-    char* to = (char*)m_sharedMemory.data();
-    const char* from = dataBuffer.data().data();
-    memcpy(to, from, qMin(m_sharedMemory.size(), size));
-    m_sharedMemory.unlock();
-}
-
-void ConcurrentSegment::writeImage(QImage img)
+void ConcurrentSegment::write(QImage img)
 {
     // Load into shared memory
     QBuffer buffer;

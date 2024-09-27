@@ -20,7 +20,7 @@ void FrameStream::setFrame(const QImage& frame)
 
 QImage FrameStream::frame()
 {
-    return m_segment.readImage();
+    return m_segment.read();
 }
 
 void FrameStream::onRequestRead()
