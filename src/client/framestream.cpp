@@ -6,7 +6,7 @@ FrameStream::FrameStream(QObject *parent)
     : QObject(parent)
 {
     m_segment.setHandle("img");
-    m_pulseGenerator.setPulseWidth(17000);
+    m_pulseGenerator.setFrequency(60);
 
     connect(&m_pulseGenerator, &SymmetricPulseGenerator::requestRead, this, &FrameStream::onRequestRead);
     m_pulseGenerator.start();

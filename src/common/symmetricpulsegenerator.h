@@ -3,6 +3,7 @@
 #include <QThread>
 
 typedef unsigned long long u_llong;
+typedef int Hz;
 
 class SymmetricPulseGenerator : public QThread
 {
@@ -15,7 +16,7 @@ private:
     ///// FUNCTIONS /////
 public:
                     SymmetricPulseGenerator();
-    bool            setPulseWidth(int pulseWidth);
+    bool            setFrequency(Hz frequency);
 
 private:
     inline u_llong  usecSinceEpoch();

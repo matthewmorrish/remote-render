@@ -14,16 +14,11 @@ SymmetricPulseGenerator::SymmetricPulseGenerator()
     // ...
 }
 
-bool SymmetricPulseGenerator::setPulseWidth(int pulseWidth)
+bool SymmetricPulseGenerator::setFrequency(Hz frequency)
 {
-    /* TODO
-     * Setting a calculated pulse-width seems silly, this should
-     * be set in Hz then calculated on start.
-     */
-
     if (!m_pulseWidth)
     {
-        m_pulseWidth = pulseWidth;
+        m_pulseWidth = 1000000 /* usecs per second */ / frequency;
         return true;
     }
 

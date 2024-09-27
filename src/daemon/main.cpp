@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 
     // Create a pulse generator
     SymmetricPulseGenerator symmetricPulseGenerator;
-    symmetricPulseGenerator.setPulseWidth(17000);
+    symmetricPulseGenerator.setFrequency(60);
     symmetricPulseGenerator.start();
 
     // Create an engine & expose the concurrent segment / pulse generator to it
