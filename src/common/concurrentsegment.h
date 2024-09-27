@@ -2,8 +2,8 @@
 
 #include <QSharedMemory>
 #include <QByteArray>
-
 #include <QImage>
+#include <QBuffer>
 
 class ConcurrentSegment
 {
@@ -21,6 +21,12 @@ public:
     void            initialize(int size);
     void            setHandle(const QString &handle);
 
-    QImage          read();
-    void            write(const QImage& img);
+    QByteArray      readByteArray();
+    void            writeByteArray(const QByteArray& data);
+
+    QImage          readImage();
+    void            writeImage(const QImage& img);
+
+private:
+    void            write(const QBuffer& buffer);
 };

@@ -8,13 +8,17 @@ Window {
     visible: true
     title: qsTr("Daemon - Real Screen")
 
+    Component.onCompleted: {
+        eventRelay.setObserver(daemonRealScreen);
+    }
+
     Connections {
         target: symmetricPulseGenerator
         function onRequestWrite() {
             virtualScreen.grabToImage(function(result) {
                 if (result !== null)
                 {
-                    qmlConcurrentSegment.write(result.image);
+                    qmlConcurrentSegment.writeImage(result.image);
                 }
              }, Qt.size(virtualScreen.width, virtualScreen.height))
         }

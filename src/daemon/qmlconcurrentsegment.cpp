@@ -14,12 +14,12 @@ void QmlConcurrentSegment::setHandle(const QString& handle)
     m_segment.setHandle(handle);
 }
 
-QImage QmlConcurrentSegment::read()
+QImage QmlConcurrentSegment::readImage()
 {
-    return m_segment.read();
+    return m_segment.readImage();
 }
 
-void QmlConcurrentSegment::write(const QImage& img)
+void QmlConcurrentSegment::writeImage(const QImage& img)
 {
-    m_segment.write(img);
+    m_segment.writeImage(img);
 }

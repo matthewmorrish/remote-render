@@ -8,6 +8,12 @@
 #include <stdio.h>
 #include <time.h>
 
+SymmetricPulseGenerator& SymmetricPulseGenerator::getInstance()
+{
+    static SymmetricPulseGenerator instance;
+    return instance;
+}
+
 SymmetricPulseGenerator::SymmetricPulseGenerator()
     : m_pulseWidth(0)
 {
@@ -45,8 +51,7 @@ u_llong SymmetricPulseGenerator::synchronizedTimeReference()
 
 void SymmetricPulseGenerator::run() [[noreturn]]
 {
-    /* TODO
-     * This loop runs so fast that excessive compute resources
+    /* TODO - This loop runs so fast that excessive compute resources
      * are unnecessarily consumed on start.  A calculated delay
      * should be added to drop resource consumption.
      */

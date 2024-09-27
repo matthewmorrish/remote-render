@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls 2.15
 
 import Client.Frame
+import EventListener 1.0
 
 Window {
     id: clientRealScreen
@@ -9,6 +10,8 @@ Window {
     height: 1080 / 2
     visible: true
     title: qsTr("Client - Real Screen")
+
+    Component.onCompleted: QmlEventListener.listenTo(clientRealScreen)
 
     Rectangle {
         id: virtualScreenContainer

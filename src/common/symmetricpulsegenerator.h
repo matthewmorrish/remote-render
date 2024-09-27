@@ -2,8 +2,8 @@
 
 #include <QThread>
 
-typedef unsigned long long u_llong;
 typedef int Hz;
+typedef unsigned long long u_llong;
 
 class SymmetricPulseGenerator : public QThread
 {
@@ -11,21 +11,26 @@ class SymmetricPulseGenerator : public QThread
 
     ///// MEMBERS /////
 private:
-    int             m_pulseWidth;
+    int                             m_pulseWidth;
 
     ///// FUNCTIONS /////
 public:
-                    SymmetricPulseGenerator();
-    bool            setFrequency(Hz frequency);
+    static SymmetricPulseGenerator& getInstance();
+                                    SymmetricPulseGenerator(SymmetricPulseGenerator const&) = delete;
+    void                            operator=(SymmetricPulseGenerator const&)               = delete;
+
+    bool                            setFrequency(Hz frequency);
 
 private:
-    inline u_llong  usecSinceEpoch();
-    inline u_llong  synchronizedTimeReference();
+                                    SymmetricPulseGenerator();
 
-    void            run() override;
+    inline u_llong                  usecSinceEpoch();
+    inline u_llong                  synchronizedTimeReference();
+
+    void                            run() override;
 
     ///// SIGNALS / SLOTS /////
 signals:
-    void            requestRead();
-    void            requestWrite();
+    void                            requestRead();
+    void                            requestWrite();
 };

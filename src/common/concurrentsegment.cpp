@@ -1,8 +1,5 @@
 #include "concurrentsegment.h"
 
-#include <QBuffer>
-#include <QDebug>
-
 ConcurrentSegment::ConcurrentSegment()
     : m_initialized(false)
 {
@@ -19,7 +16,39 @@ void ConcurrentSegment::setHandle(const QString& handle)
     m_sharedMemory.setKey(handle);
 }
 
-QImage ConcurrentSegment::read()
+QByteArray ConcurrentSegment::readByteArray()
+{
+    QByteArray data;
+
+    if (m_sharedMemory.attach())
+    {
+        QBuffer buffer;
+        QDataStream in(&buffer);
+
+        m_sharedMemory.lock();
+
+        buffer.setData((char*)m_sharedMemory.constData(), m_sharedMemory.size());
+        buffer.open(QBuffer::ReadOnly);
+        in >> data;
+
+        m_sharedMemory.unlock();
+        m_sharedMemory.detach();
+    }
+
+    return data;
+}
+
+void ConcurrentSegment::writeByteArray(const QByteArray& data)
+{
+    QBuffer buffer;
+    buffer.open(QBuffer::ReadWrite);
+    QDataStream out(&buffer);
+    out << data;
+
+    this->write(buffer);
+}
+
+QImage ConcurrentSegment::readImage()
 {
     QImage image;
 
@@ -41,13 +70,18 @@ QImage ConcurrentSegment::read()
     return image;
 }
 
-void ConcurrentSegment::write(const QImage& img)
+void ConcurrentSegment::writeImage(const QImage& img)
 {
     QBuffer buffer;
     buffer.open(QBuffer::ReadWrite);
     QDataStream out(&buffer);
     out << img;
 
+    this->write(buffer);
+}
+
+void ConcurrentSegment::write(const QBuffer& buffer)
+{
     /* Try to create a segment. Since we are repeatedly reusing a
      * shared segment for our image, it must be created with a size
      * equal to the maximum possible size for an image with dimensions

@@ -22,6 +22,7 @@ public:
                         QmlConcurrentSegment(QObject* parent = nullptr);
 
     void                setHandle(const QString& handle);
-    QImage              read();
-    Q_INVOKABLE void    write(const QImage& img);
+
+    QImage              readImage();
+    Q_INVOKABLE void    writeImage(const QImage& img);
 };
