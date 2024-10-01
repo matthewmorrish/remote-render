@@ -1,4 +1,5 @@
 #include "qmleventlistener.h"
+#include <QRandomGenerator>
 
 QmlEventListener::QmlEventListener(QObject* parent)
     : QObject(parent),
@@ -22,8 +23,6 @@ QPointF QmlEventListener::positionSelectFilter(QEvent* event)
 
     switch( event->type() )
     {
-
-    // Touch device
     case QEvent::TouchEnd:
     {
         QTouchEvent* te = static_cast<QTouchEvent*>(event);
@@ -35,7 +34,6 @@ QPointF QmlEventListener::positionSelectFilter(QEvent* event)
         }
     }
 
-    // Mouse device
     case QEvent::MouseButtonRelease:
     {
         QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
@@ -46,7 +44,6 @@ QPointF QmlEventListener::positionSelectFilter(QEvent* event)
         }
     }
 
-    // Unknown device
     default:
         (void)0;
     }
@@ -72,16 +69,19 @@ void QmlEventListener::writePos()
 {
     if (!m_pos.isNull())
     {
-        qDebug() << "got pos, sending" << m_pos;
+        // Ensures each event is unique so the buffer is always read
+        uint r  = QRandomGenerator::global()->generate();
 
         float x = m_pos.x();
         float y = m_pos.y();
 
-        QByteArray xy = QByteArray(reinterpret_cast<const char*>(&x), sizeof(x))
-                        + ';' // might break
-                        + QByteArray(reinterpret_cast<const char*>(&y), sizeof(y));
+        QByteArray rxy = QByteArray(reinterpret_cast<const char*>(&r), sizeof(r)).toHex()
+                         + ';'
+                         + QByteArray(reinterpret_cast<const char*>(&x), sizeof(x)).toHex()
+                         + ';'
+                         + QByteArray(reinterpret_cast<const char*>(&y), sizeof(y)).toHex();
 
-        m_segment.writeByteArray(xy);
-        m_pos = QPointF();
+        m_segment.writeByteArray(rxy);
+        m_pos = {0, 0};
     }
 }

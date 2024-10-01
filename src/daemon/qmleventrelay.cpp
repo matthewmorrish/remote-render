@@ -15,49 +15,77 @@ QmlEventRelay::QmlEventRelay(QObject* parent)
 
 void QmlEventRelay::setObserver(QObject* object)
 {
-    m_observer = object;
+    if (object != nullptr)
+    {
+        m_observer = object;
+    }
 }
 
-void QmlEventRelay::sendMouseEvent(QPointF pos, int button)
+void QmlEventRelay::sendMouseEvent(QPointF pos)
 {
-    Qt::MouseButton type = Qt::MouseButton(button);
+    /* As per https://doc.qt.io/qt-6/qcoreapplication.html#postEvent,
+     *
+     *   "The event must be allocated on the heap since the post event
+     *   queue will take ownership of the event and delete it once it
+     *   has been posted."
+     *
+     * making cleanup unwarranted.
+     */
 
-    auto down = new QMouseEvent(QMouseEvent::Type::MouseButtonPress, pos, type, type, Qt::KeyboardModifier::NoModifier);
-    QCoreApplication::postEvent(m_observer, down);
+    QMouseEvent* press   = new QMouseEvent(QMouseEvent::Type::MouseButtonPress,
+                                           pos,
+                                           Qt::LeftButton,
+                                           Qt::LeftButton,
+                                           Qt::KeyboardModifier::NoModifier);
 
-    auto up = new QMouseEvent(QMouseEvent::Type::MouseButtonRelease, pos, type, type, Qt::KeyboardModifier::NoModifier);
-    QCoreApplication::postEvent(m_observer, up);
+    QMouseEvent* release = new QMouseEvent(QMouseEvent::Type::MouseButtonRelease,
+                                           pos,
+                                           Qt::LeftButton,
+                                           Qt::LeftButton,
+                                           Qt::KeyboardModifier::NoModifier);
+
+    QCoreApplication::postEvent(m_observer, press);
+    QCoreApplication::postEvent(m_observer, release);
+}
+
+QPointF QmlEventRelay::parseEncodedPosition(QByteArray pos)
+{
+    float x = 0.00f;
+    float y = 0.00f;
+
+    QList<QByteArray> xy = pos.split(';');
+    if (xy.size() == 3)
+    {
+        // Throw away r ( = xy.at(0) )
+        QByteArray x_decoded = QByteArray::fromHex(xy.at(1));
+        QByteArray y_decoded = QByteArray::fromHex(xy.at(2));
+
+        if (x_decoded.size() >= sizeof(x))
+        {
+            x = *reinterpret_cast<const float*>(x_decoded.data());
+        }
+
+        if (y_decoded.size() >= sizeof(y))
+        {
+            y = *reinterpret_cast<const float*>(y_decoded.data());
+        }
+    }
+
+    return {x, y};
 }
 
 void QmlEventRelay::readPos()
 {
-    static QByteArray previous;
     QByteArray current = m_segment.readByteArray();
 
-    if (current != previous)
+    if (current != m_previous)
     {
-        previous = current;
-
-        QList<QByteArray> xy = current.split(';');
-        if (xy.size() == 2)
+        QPointF point = parseEncodedPosition(current);
+        if (!point.isNull())
         {
-            float x = 0.00f;
-            float y = 0.00f;
-
-            if (xy.at(0).size() >= sizeof(x))
-            {
-                x = *reinterpret_cast<const float*>(xy.at(0).data());
-            }
-
-            if (xy.at(1).size() >= sizeof(y))
-            {
-                y = *reinterpret_cast<const float*>(xy.at(1).data());
-            }
-
-            QPointF point = {x, y};
-
-            sendMouseEvent(point, 1);
-            sendMouseEvent(point, 2);
+            sendMouseEvent(point);
         }
+
+        m_previous = current;
     }
 }

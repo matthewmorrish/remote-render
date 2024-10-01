@@ -20,9 +20,7 @@ int main(int argc, char *argv[])
 
     // Create an engine & expose the framestream
     QQmlApplicationEngine engine;
-    {
-        engine.rootContext()->setContextProperty("FrameStream", &stream);
-    }
+    engine.rootContext()->setContextProperty("FrameStream", &stream);
 
     // Make FrameStreamView && QmlEventFilter available to Qml
     qmlRegisterType<FrameStreamView>("Client.Frame", 1, 0, "FrameStreamView");

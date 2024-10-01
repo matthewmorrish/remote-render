@@ -14,11 +14,15 @@ private:
     QObject*                    m_observer;
     SymmetricPulseGenerator*    m_generator;
     ConcurrentSegment           m_segment;
+    QByteArray                  m_previous;
 
     ///// FUNCTIONS /////
 public:
                                 QmlEventRelay(QObject* parent = nullptr);
-    void                        sendMouseEvent(QPointF pos, int button);
+    void                        sendMouseEvent(QPointF pos);
+
+private:
+    QPointF                     parseEncodedPosition(QByteArray pos);
 
     ///// SIGNALS / SLOTS /////
 public slots:
